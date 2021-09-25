@@ -1,0 +1,35 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: container-image-template
+spec:
+  type: LoadBalancer
+  selector:
+    app: container-image-template
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 3000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: container-image-template
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: container-image-template
+  template:
+    metadata:
+      labels:
+        app: container-image-template
+    spec:
+      containers:
+      - name: node
+        image: docker.io/bmngld/container-image-template@sha256:264f9a5f3a8e29943976f181b4e6ddc34d0088eed3abb19da1c0aa5253833089
+        ports:
+        - containerPort: 3000
+          protocol: TCP
